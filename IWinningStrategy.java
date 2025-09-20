@@ -1,3 +1,3 @@
 public interface IWinningStrategy {
-    public boolean isWinner(Player player, Board board);
+    public boolean isWinner(int newPosition, Board board);
 }
