@@ -1,0 +1,103 @@
+classDiagram
+    class Client {
+        +main(String[] args)
+    }
+
+    class Game {
+        -Player[] players
+        -int indexOfCurrentPlayer
+        -Board board
+        -Dice dice
+        -IWinningStrategy winningStrategy
+        -IStartingStrategy startingStrategy
+        +play()
+    }
+
+    class GameBuilder {
+        -Player[] players
+        -Board board
+        -Dice dice
+        -IWinningStrategy winningStrategy
+        -IStartingStrategy startingStrategy
+        +setPlayers(Player[]): GameBuilder
+        +setBoard(Board): GameBuilder
+        +setDice(Dice): GameBuilder
+        +setWinningStrategy(IWinningStrategy): GameBuilder
+        +setStartingStrategy(IStartingStrategy): GameBuilder
+        +build(): Game
+    }
+
+    class Player {
+        -String name
+        -int position
+        +getName(): String
+        +getPosition(): int
+        +setPosition(int)
+        +setName(String)
+    }
+
+    class Dice {
+        -int sides
+        +roll(): int
+    }
+
+    class Board {
+        -HashMap~Integer,BoardEntity~ cells
+        -int size
+        +getSize(): int
+        +getEntity(int): BoardEntity
+        +hasSnakeOrLadder(int): boolean
+    }
+
+    class BoardEntity {
+        -int start
+        -int end
+        +getStart(): int
+        +setStart(int)
+        +getEnd(): int
+        +setEnd(int)
+    }
+
+    class Snake {
+    }
+
+    class Ladder {
+    }
+
+    class IStartingStrategy {
+        <<interface>>
+        +canStart(int): boolean
+    }
+
+    class IWinningStrategy {
+        <<interface>>
+        +isWinner(int, Board): boolean
+    }
+
+    class DefaultStart {
+        +canStart(int): boolean
+    }
+
+    class OtherStart {
+        +canStart(int): boolean
+    }
+
+    class DefaultWin {
+        +isWinner(int, Board): boolean
+    }
+
+    %% Relationships
+    Client --> Game
+    Game *-- Player
+    Game *-- Board
+    Game *-- Dice
+    Game o-- IWinningStrategy
+    Game o-- IStartingStrategy
+    GameBuilder ..> Game
+    Board *-- BoardEntity
+    Snake --|> BoardEntity
+    Ladder --|> BoardEntity
+    DefaultStart ..|> IStartingStrategy
+    OtherStart ..|> IStartingStrategy
+    DefaultWin ..|> IWinningStrategy
+    Game *-- GameBuilder
